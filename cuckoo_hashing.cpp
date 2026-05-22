@@ -82,7 +82,7 @@ bool Cuckoo_Hashing::insert_with_replacement(
     bool useFirstHash,
     size_t iterations) {
 
-    if (iterations >= MAX_LOOP_ITERATIONS) {
+    if (iterations >= max_loop_iterations_) {
         return false;
     }
 
@@ -173,7 +173,7 @@ void Cuckoo_Hashing::insert(
 
     size_t attempts = 0;
 
-    while (attempts < MAX_REHASH_ATTEMPTS) {
+    while (attempts < max_rehash_attempts_) {
 
         if (insert_with_replacement(
             key,

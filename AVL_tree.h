@@ -1,37 +1,61 @@
 #pragma once
-#include "utility.h" // for int8_t
-#include <string>
-#include <iostream>
 
-struct AVLNode {
+#include "hash_tables.h"
+#include <string>
+
+struct AVL_Node {
     std::string key;
     int value;
+    int height;
 
-    AVLNode(const std::string& k, int v)
-        : key(k), value(v), left(nullptr), right(nullptr), height(1) {
-    }
+    AVL_Node* left;
+    AVL_Node* right;
+
+    AVL_Node(const std::string& k, int v): key(k), value(v), height(1), left(nullptr), right(nullptr) {}
 };
 
-class AVLTree {
+class AVL_Tree : public Hash_Table {
 private:
-    AVLNode* root = nullptr;
+    AVL_Node* root;
 
-    void destroy(AVLNode* node);
-    size_t get_height(AVLNode* node) const;
-    AVLNode* rotate_right(AVLNode* node);
-    AVLNode* rotate_left(AVLNode* node);
-    int8_t balance_factor(AVLNode* node) const;
-    AVLNode* balance_tree(AVLNode* node);
-    AVLNode* insert_node(AVLNode* node, const std::string& key, int value);
-    AVLNode* remove_node(AVLNode* node, const std::string& key, int& removed_value);
-    AVLNode* find_node(AVLNode* node, const std::string& key) const;
-    void print_in_order(AVLNode* node) const;
+    void destroy(AVL_Node* node);
+
+    AVL_Node* insertNode(
+        AVL_Node* node,
+        const std::string& key,
+        int value);
+
+    AVL_Node* removeNode(
+        AVL_Node* node,
+        const std::string& key);
+
+    AVL_Node* findNode(
+        AVL_Node* node,
+        const std::string& key) const;
+
+    AVL_Node* minNode(AVL_Node* node);
+
+    AVL_Node* rotateLeft(AVL_Node* node);
+    AVL_Node* rotateRight(AVL_Node* node);
+
+    int height(AVL_Node* node) const;
+    int balanceFactor(AVL_Node* node) const;
+
+    void printNode(AVL_Node* node) const;
 
 public:
-    AVLTree();
-    ~AVLTree();
+    AVL_Tree();
+    ~AVL_Tree();
 
-    void insert(const std::string& key, int value);
-    int remove(const std::string& key);
-    AVLNode* find(const std::string& key) const;
-    void print(void) const;
+    void insert(
+        const std::string& key,
+        int value) override;
+
+    void remove(
+        const std::string& key) override;
+
+    int get(
+        const std::string& key) const;
+
+    void print() const;
+};
