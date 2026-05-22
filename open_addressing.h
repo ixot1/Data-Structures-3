@@ -1,5 +1,5 @@
 #pragma once
-#include "hash_table.h"
+#include "hash_tables.h"
 
 // Node structure for open addressing hash table
 struct Open_Addressing_Node {
