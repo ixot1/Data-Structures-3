@@ -12,6 +12,7 @@ const int Benchmark::REPETITIONS = 10;
 const int Benchmark::SEED = 12345;
 const std::vector<int> Benchmark::SIZES = { 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000 };
 
+// Helper class for generating uniformly distributed random integers
 class RandomGenerator {
 private:
     std::mt19937 generator;
@@ -21,6 +22,7 @@ public:
     int getNext() { return distribution(generator); }
 };
 
+// Generic function to benchmark insertion performance for a given structure
 template <typename StructureType>
 static void runBenchmark(const std::string& testName, const std::string& fileName, int numCopies,
     std::function<void(StructureType&, int, int)> operation)
@@ -28,15 +30,19 @@ static void runBenchmark(const std::string& testName, const std::string& fileNam
     std::cout << "\n[ Starting benchmark: " << testName << " ]\n";
     std::ofstream file(fileName);
     if (!file.is_open()) return;
+
+    // Write CSV headers for data output
     file << "Size_N;Avg_Time_ns\n";
 
     for (int n : Benchmark::SIZES) {
         double totalTimeNs = 0.0;
         for (int r = 0; r < Benchmark::REPETITIONS; ++r) {
+            // Create independent copies of the structure to average out the results
             std::vector<StructureType> copies(numCopies);
             RandomGenerator prepDataRng(Benchmark::SEED + r, 1, 2000000);
             RandomGenerator prepValueRng(Benchmark::SEED + 999 + r, 1, 5000000);
 
+            // Pre-fill the structures with initial background data
             for (int j = 0; j < n; ++j) {
                 int key = prepDataRng.getNext();
                 int val = prepValueRng.getNext();
@@ -48,6 +54,7 @@ static void runBenchmark(const std::string& testName, const std::string& fileNam
             RandomGenerator testDataRng(Benchmark::SEED + 777 + r, 2000001, 4000000);
             RandomGenerator testValueRng(Benchmark::SEED + 888 + r, 1, 5000000);
 
+            // Start the high-resolution timer for the measured operations
             auto start = std::chrono::high_resolution_clock::now();
             for (int i = 0; i < numCopies; ++i) {
                 operation(copies[i], testDataRng.getNext(), testValueRng.getNext());
@@ -64,6 +71,7 @@ static void runBenchmark(const std::string& testName, const std::string& fileNam
     file.close();
 }
 
+// Generic function to benchmark deletion performance for a given structure
 template <typename StructureType>
 static void runRemoveBenchmark(const std::string& testName, const std::string& fileName, int numCopies,
     std::function<void(StructureType&, int)> operation)
@@ -82,6 +90,7 @@ static void runRemoveBenchmark(const std::string& testName, const std::string& f
             RandomGenerator prepDataRng(Benchmark::SEED + r, 1, 2000000);
             RandomGenerator prepValueRng(Benchmark::SEED + 999 + r, 1, 5000000);
 
+            // Pre-fill the structures and track inserted keys to guarantee successful deletion
             for (int j = 0; j < n; ++j) {
                 int key = prepDataRng.getNext();
                 int val = prepValueRng.getNext();
@@ -92,6 +101,7 @@ static void runRemoveBenchmark(const std::string& testName, const std::string& f
             }
 
             RandomGenerator idxRng(Benchmark::SEED + r + 123, 0, n - 1);
+            // Randomly select a known existing key to measure removal time
             int targetKey = insertedKeysHistory[idxRng.getNext() % n];
 
             auto start = std::chrono::high_resolution_clock::now();
@@ -110,6 +120,7 @@ static void runRemoveBenchmark(const std::string& testName, const std::string& f
     file.close();
 }
 
+// Executes all defined benchmarks
 void Benchmark::runAllTests() {
     testInsertAVL();
     testRemoveAVL();
