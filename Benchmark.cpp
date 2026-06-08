@@ -1,5 +1,5 @@
 #include "Benchmark.h"
-#include "AVL_tree.h"
+#include "hashtable_avl.h"
 #include "open_addressing.h"
 #include "cuckoo_hashing.h"
 #include <iostream>
@@ -120,13 +120,13 @@ void Benchmark::runAllTests() {
 }
 
 void Benchmark::testInsertAVL() {
-    runBenchmark<AVL_Tree>("AVL::insert", "AVL_insert.csv", 50,
-        [](AVL_Tree& s, int key, int val) { s.insert(key, val); });
+    runBenchmark<HashTable_AVL>("hashTable_AVL::insert", "AVL_insert.csv", 50,
+        [](HashTable_AVL& s, int key, int val) { s.insert(key, val); });
 }
 
 void Benchmark::testRemoveAVL() {
-    runRemoveBenchmark<AVL_Tree>("AVL::remove", "AVL_remove.csv", 50,
-        [](AVL_Tree& s, int key) { s.remove(key); });
+    runRemoveBenchmark<HashTable_AVL>("HashTable_AVL::remove", "AVL_remove.csv", 50,
+        [](HashTable_AVL& s, int key) { s.remove(key); });
 }
 
 void Benchmark::testInsertOpenAddressing() {

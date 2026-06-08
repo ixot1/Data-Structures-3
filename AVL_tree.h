@@ -11,7 +11,7 @@ struct AVL_Node {
     AVL_Node(int k, int v) : key(k), value(v), height(1), left(nullptr), right(nullptr) {}
 };
 
-class AVL_Tree : public Hash_Table {
+class AVL_Tree {
 private:
     AVL_Node* root;
 
@@ -30,7 +30,7 @@ public:
     AVL_Tree();
     ~AVL_Tree();
 
-    void insert(int key, int value) override;
-    void remove(int key) override;
+    void insert(int key, int value);
+    void remove(int key);
     int get(int key) const;
 };

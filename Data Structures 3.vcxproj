@@ -135,6 +135,7 @@
     <ClCompile Include="Benchmark.cpp" />
     <ClCompile Include="BenchmarkMenu.cpp" />
     <ClCompile Include="cuckoo_hashing.cpp" />
+    <ClCompile Include="hashtable_avl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="open_addressing.cpp" />
   </ItemGroup>
@@ -143,6 +144,7 @@
     <ClInclude Include="Benchmark.h" />
     <ClInclude Include="BenchmarkMenu.h" />
     <ClInclude Include="cuckoo_hashing.h" />
+    <ClInclude Include="hashtable_avl.h" />
     <ClInclude Include="hash_tables.h" />
     <ClInclude Include="open_addressing.h" />
   </ItemGroup>
