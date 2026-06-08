@@ -29,7 +29,8 @@ size_t Cuckoo_Hashing::hash1(int key) const {
 }
 
 size_t Cuckoo_Hashing::hash2(int key) const {
-    return (static_cast<size_t>(std::abs(key)) * 37 + 17) % capacity;
+    size_t k = static_cast<size_t>(std::abs(key));
+    return (k ^ (k * 2654435761u >> 16)) % capacity;
 }
 
 Cuckoo_Node* Cuckoo_Hashing::find(int key) const {
